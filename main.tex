@@ -1,0 +1,204 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+
+\title{Some Light Analysis}
+\author{Tani Nevins-Klein}
+\date{May 2023}
+
+\begin{document}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\maketitle
+
+%%\section{Introduction}
+%%The Fundamental Theorem of Calculus (``FTC'') is perhaps one of the most elegant and fascinating results in the history of modern mathematics. It brought two seemingly distant fields, differential and integral calculus, into one, now-inseparable system, and proved to be the catalyst for centuries of discovery and generalization. Starting from very basic principles, we seek to prove this result and all that leads up to it (as well as several corollaries and related theorems). 
+
+\section{Foundations of Calculus}
+We assume $f$, $g$, and $h$ are all real-valued functions of some real variable $x$.
+\begin{definition}[Limit]
+$$
+\lim_{x \to a} f(x) = L \iff \forall \varepsilon > 0,\ \exists \delta > 0 : \forall x \neq a \ |x - a| < \delta \implies |f(x) - L| < \varepsilon
+$$
+\end{definition}
+
+\begin{remark}
+We extend our standing assumptions such that $$
+\lim_{x \to a} f(x) = L_1 \text{ and } \lim_{x \to a} g(x) = L_2
+$$
+\end{remark}
+
+\begin{theorem}[Linearity of the limit]
+$$\lim_{x \to a} [f(x) + g(x)] = \lim_{x \to a} f(x) + \lim_{x \to a} g(x)$$ 
+$$\lim_{x \to a} c f(x) = c \lim_{x \to a} f(x)$$
+\end{theorem}
+\begin{proof}
+To show that the limit preserves addition, we must show that for all $\varepsilon > 0$, there exists some $\delta > 0$ such that if $|x - a| < \delta$ then $|(f(x) + g(x)) - (L_1 + L_2)| < \varepsilon$.
+By definition of the limit, we can choose a $\delta_1 > 0$ and a $\delta_2 > 0$ such that $|x - a| < \delta_1 \implies |f(x) - L| < \frac{\varepsilon}{2}$ and $|x - a| < \delta_2 \implies |g(x) - L| < \frac{\varepsilon}{2}$. Choose $\delta = \min{\{\delta_1, \delta_2\}}$, and assume $|x - a| < \delta$. Thus we have
+\[
+|f(x) - L_1| < \frac{\varepsilon}{2} \text{ and } |g(x) - L_2| < \frac{\varepsilon}{2}.
+\]
+Adding inequalities, we obtain that 
+\[
+|f(x) - L_1| + |g(x) - L_2| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon
+\]
+and, by the Triangle Inequality and transitivity of inequality, we obtain
+\[
+|f(x) + g(x) - (L_1 + L_2)| < \varepsilon
+.\]
+
+
+The proof for the second part is much simpler. We must show that for all $\varepsilon > 0$, there exists some $\delta > 0$ such that if $|x - a| < \delta$ then $|cf(x) - cL_1| < \varepsilon$.
+
+
+Given $\varepsilon > 0$. If $c = 0$, then clearly $|0f(x) - 0L_1| = 0 < \varepsilon$, regardless of $\delta$. Otherwise, let $\delta_1 > 0$ be that value such that 
+$$|x - a| < \delta_1 \implies |f(x) - L_1| < \frac{\varepsilon}{|c|}.$$ 
+Choose $\delta = \delta_1$. Assume $|x - a| < \delta $. Thus $$|f(x) - L_1| < \frac{\varepsilon}{|c|} \implies |c||f(x) - L_1| < \varepsilon \implies |cf(x) - cL_1| < \varepsilon.$$
+\end{proof}
+
+\begin{theorem}[Limit preserves multiplication]
+$$\lim_{x \to a} f(x)g(x) = \left(\lim_{x \to a} f(x)\right) \left(\lim_{x \to a} g(x) \right) = L_1 L_2$$
+\end{theorem}
+\begin{proof}
+    Given $\varepsilon > 0$, we must show there exists some $\delta > 0$ such that $|x - a| < \delta \implies |f(x) - L| < \varepsilon$.
+
+    Let $\delta_1, \delta_2, \delta_3$ such that:
+    \begin{align*}
+    |x - a| < \delta_1 &\implies |f(x) - L_1| < \frac{\varepsilon}{2 |L_2|}\\
+    |x - a| < \delta_2 &\implies |g(x) - L_2| < \frac{\varepsilon}{2 (1 + |L_1|)}\\
+    |x - a| < \delta_3 &\implies |f(x) - L_1| < 1.
+    \end{align*}
+    Choose $\delta = \min\{\delta_1, \delta_2, \delta_3\}$, and assume $|x - a| < \delta$. Note that
+    \begin{align}
+        |f(x)| &= |f(x) - L_1 + L_2| \hspace{4em} &\text{Adding and subtracting 0} \\
+        &\leq |f(x) - L_1| + |L_1| & \text{Triangle Inequality} \\
+        &< 1 + |L_1| & \text{$|x - a| < \delta_3$}
+    \end{align}
+    Using this fact, we show that
+    \begin{align*}
+        |f(x)g(x) - L_1 L_2| &= |f(x)g(x) + f(x) L_2 - f(x) L_2 - L_1 L_2| \\
+        &= |f(x)[g(x) - L_2] - L_2[f(x) - L_1]| \\
+        &\leq |f(x)[g(x)-L_2]| + |L_2[f(x) - L]| \\
+        &= |f(x)| |g(x) - L_2| + |L_2| |f(x) - L| \\
+        &< (1 + |L_1|) \frac{\varepsilon}{2(1 + |L_1)} + |L_2| \frac{\varepsilon}{2|L_2|} \\
+        &= \frac{\varepsilon}{2} + \frac{\varepsilon}{2} \\
+        &= \varepsilon
+    \end{align*}
+\end{proof}
+
+\begin{remark}
+Many inequalities in these proofs skip some steps. For example, to rigorously derive the third-to-last line of the previous proof, take the right side of the statements involving $\delta_1$ and $\delta_2$, multiplying one by $|L_2|$ and the other by $1 + |L_1|$ (by right $\delta_3$ inequality), and sum them.
+\end{remark}
+
+\begin{theorem}[Equivalency of $h \to 0$ and $x \to a$]
+\[
+\lim_{x \to a} f(x) = L \iff \lim_{x \to 0} f(a + x) = L
+\]
+\end{theorem}
+\begin{proof}
+    First, we will show $\lim_{x \to a} f(x) = L$ implies $\lim_{x \to 0} f(a + x) = L$. 
+    
+    Given $\varepsilon > 0$. By making the substitution, $x \to x + a$, and noting $(a + x) - a = x$, we can find $\delta_1 > 0$ such that $|x| < \delta_1 \implies |f(a + x) - L| < \varepsilon.$ Choosing $\delta = \delta_1$, and assuming $|x| < \delta,$ we have $|f(a + x) - L| < \varepsilon.$
+
+    The other direction is omitted for similarity.
+    
+\end{proof}
+
+\section{Derivatives}
+\begin{definition}[Derivative]
+    The derivative of $f(x)$, denoted $f'(x)$ or $\frac{df}{dx}$, is defined as follows.
+    $$ \frac{df}{dx} = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h}$$
+
+    The derivative can also be defined by: 
+    $$ \frac{df}{dx} = \lim_{x \to a} \frac{f(x) - f(a)}{x - a},$$
+    which can be derived straightforwardly in Theorem 1.3.
+\end{definition}
+
+\begin{theorem}[Linearity of the derivative]
+    $$
+        \frac{d}{dx} c f(x) = c \frac{df}{dx} \text { and } \frac{d}{dx} \left[ f(x) + g(x) \right] = \frac{df}{dx} + \frac{dg}{dx}
+    $$
+\end{theorem}
+\begin{proof}
+First, we will show the derivative preserves scalar multiplication.
+\begin{align*}
+\lim_{h \to 0} \frac{cf(x + h) - cf(x)}{h} &= \lim_{h \to 0} \frac{c[f(x + h) - f(x)]}{h} \hspace{2em} & \text{Factoring out $c$} \\
+&= c \lim_{h \to 0} \frac{f(x + h) - f(x)}{h} & \text{Linearity of limit} \\
+&= c f'(x) & \text{Def. of derivative}
+\end{align*}
+Showing that the derivative preserves addition completes the proof.
+\begin{align*}
+\frac{d}{dx} \left[ f(x) + g(x) \right] &= \lim_{h \to 0} \frac{[f(x + h) + g(x + h)] - [f(x) + g(x)]}{h} \hspace{0.5em} & \text{Definition of sum} \\
+&= \lim_{h \to 0} \frac{f(x + h) - f(x) + g(x + h) - g(x)}{h} & \text{Rearranging} \\
+&= \lim_{h \to 0} \left[ \frac{f(x + h) - f(x)}{h} + \frac{g(x + h) - g(x)}{h} \right] & \text{Splitting frac.} \\
+&= \lim_{h \to 0} \frac{f(x + h) - f(x)}{h} + \lim_{h \to 0} \frac{g(x + h) - g(x)}{h} & \text{2.1} \\
+&= \frac{df}{dx} + \frac{dg}{dx} & \text{Def. of derivative}
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Product rule for derivatives]
+    $$\frac{d}{dx} f(x)g(x) = f'(x)g(x) + g'(x)f(x)$$
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+    \frac{d}{dx} f(x)g(x) &= \lim_{h \to 0} \frac{f(x + h)g(x + h) - f(x)g(x)}{h} \\
+    &= \lim_{h \to 0} \frac{f(x + h)g(x + h) + f(x)g(x + h) - f(x)g(x +h) - f(x)g(x)}{h} \\
+    &= \lim_{h \to 0} \frac{g(x + h) [f(x + h) - f(x)] + f(x) [g(x + h) - g(x)]}{h} \\
+    &= \lim_{h \to 0}\left[ g(x + h) \frac{f(x + h) - f(x)}{h} + f(x)\frac{g(x + h) - g(x)}{h} \right] \\
+    &= \lim_{h \to 0} g(x + h) \frac{f(x + h) - f(x)}{h} + \lim_{h \to 0} f(x)\frac{g(x + h) - g(x)}{h} \\
+    &= g(x) \lim_{h \to 0} \frac{f(x + h) - f(x)}{h} + f(x) \lim_{h \to 0} \frac{g(x + h) - g(x)}{h} \\
+    &= g(x)f'(x) + f'(x)g(x)
+    \end{align*}
+\end{proof}
+
+\begin{theorem}[Chain rule]
+$$ \frac{d}{dx} (f \circ g)(x) = f'(g(x))g'(x) $$
+\end{theorem}
+
+\begin{remark}
+The proof of the chain rule is notoriously frustrating. This one is almost verbatim from \href{https://en.wikipedia.org/wiki/Chain_rule#First_proof}{Wikipedia}, though several others exist.
+\end{remark}
+
+\begin{proof}
+\begin{align}
+\frac{d}{dx} (f \circ g)(x) &= \lim_{x \to a} \frac{f(g(x)) - f(g(a))}{x - a}
+\end{align}
+The ultimate goal of our proof is to multiply and divide by $g(x) - g(a)$, and consider the limit of the product. Unfortunately, because $g(x) - g(a)$ might be equal to zero, we have slightly more work to do. We define an auxiliary function $Q(y)$ such that:
+$$Q(y) = \begin{cases}
+    \frac{f(y) - f(g(a))}{y - g(a)}, & \text{if } y \neq g(a) \\
+    f'(g(a)), & \text{if }y = g(a) 
+\end{cases}$$
+The equality
+\[
+    \frac{f(g(x)) - f(g(a))}{x - a} = Q(g(x)) \frac{g(x) - g(a)}{x - a},
+\]
+now holds, because if $g(x) = g(a)$, the whole right hand expression is zero, otherwise the factors cancel. Then
+\begin{align*}
+\frac{d}{dx} (f \circ g)(x) &= \lim_{x \to a} \frac{f(g(x)) - f(g(a))}{x - a} \\
+&= \lim_{x \to a} Q(g(x))\left( \frac{g(x) - g(a)}{x - a}\right) \\
+&= \left( \lim_{x \to a} Q(g(x)) \right) \left( \lim_{x \to a} \frac{g(x) - g(a)}{x - a} \right) \\
+&= \left( \lim_{x \to a} \frac{f(g(x)) - f(g(a))}{g(x) - g(a)}\right) g'(x) \\
+&= f'(g(x))g'(x),
+\end{align*}
+where the second-to-last inequality comes from the fact that the value of $x$ at $a$ is irrelevant for the limit.  
+\end{proof}
+\section{Integrals and Antiderivatives}
+\begin{definition}[Antiderivative]
+    We define $\int f(x) dx$ to be the function such that $\frac{d}{dx} \int f(x) dx.$
+    
+\section{Fundamental Theorem of Calculus}
+\subsection{Partial Inverses}
+To develop a deep understanding of the Fundamental Theorem, we will begin by reviewing some important definitions from the theory of functions. 
+\subsection{Derivative/Integral is a Partial Inverse}
+\subsection{The Computation Theorem}
+\end{definition}
+
+\end{document}
